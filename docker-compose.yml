@@ -1,0 +1,30 @@
+version: '3'
+services:
+  webserver:
+    container_name: moj-webserver
+    build: 
+      context: .
+      dockerfile: ./docker/webserver/Dockerfile
+    image: httpd:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - "./data:/usr/local/apache2/htdocs/"
+    networks:
+      - wewnetrzna
+      - default
+  php:
+   container_name: php-server
+   build:
+    context: .
+    dockerfile: ./docker/phpfpm/Dockerfile
+   image: php:8.1-fpm
+   expose:
+    - "9000"
+   networks:
+    - wewnetrzna
+   volumes_from:
+    - "webserver"
+
+networks:
+  wewnetrzna:
